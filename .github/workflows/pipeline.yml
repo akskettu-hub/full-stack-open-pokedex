@@ -63,5 +63,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
-          PRERELEASE: false
-          DRY_RUN: true
+          PRERELEASE: true
+          DRY_RUN: false
