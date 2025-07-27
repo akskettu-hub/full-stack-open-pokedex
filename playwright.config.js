@@ -23,6 +23,7 @@ export default defineConfig({
   use: {
     baseURL: 'http://localhost:8080',
   },
+
   testDir: './e2e-tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
