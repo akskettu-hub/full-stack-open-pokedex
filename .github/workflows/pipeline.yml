@@ -54,26 +54,30 @@ jobs:
           curl "$deploy_url"
 
       - name: Successful deploy to server Discord notification
-        uses: rjstone/discord-webhook-notify@v2.2.1
+        uses: sarisia/actions-status-discord@v1
         if: ${{ success() && env.SKIP_CONDITION == 'false' && github.event_name == 'push' }}
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          Username: Pokedex Pipeline Bot
-          severity: info
-          color: '#008000'
-          title: Pokedex Deployment Pipeline Success
-          details: All tests passed. Commit depoyed to Render!
+          status: ${{ job.status }}
+          title: "Pokedex Deployment Pipeline Success"
+          description: "All tests passed. Commit depoyed to Render!"
+          color: 0x008000
+          url: "https://github.com/akskettu-hub/full-stack-open-pokedex/${{ github.sha }}"
+          username: Pokedex Pipeline Bot
+          
+          
 
       - name: Failed deploy to server Discord notification
-        uses: rjstone/discord-webhook-notify@v2.2.1
+        uses: sarisia/actions-status-discord@v1
         if: ${{ failure() }}
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          Username: Pokedex Pipeline Bot
-          severity: error
-          color: '#d42b12'
-          title: Pokedex Deployment Pipeline Failed!
-          details: Commit faild to pass tests or build!
+          status: ${{ job.status }}
+          title: "Pokedex Deployment Pipeline Failed!"
+          description: "Commit `${{ github.sha }}` faild to pass tests or build!"
+          color: 0xd42b12
+          url: "https://github.com/akskettu-hub/full-stack-open-pokedex/${{ github.sha }}"
+          username: Pokedex Pipeline Bot
+
   
   tag_release:
     if: ${{ !contains(join(github.event.commits.*.message), '#skip') && github.event_name == 'push' }}
