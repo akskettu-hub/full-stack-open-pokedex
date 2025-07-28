@@ -1,12 +1,9 @@
 name: Health Check
 
 on:
-  push:
-    branches: 
-      - main
-  pull_request:
-    branches: [main]
-    types: [opened, synchronize]
+  schedule:
+    - cron: "*/6 * * * *"   # <=== Change this value
+
 
 jobs:
   health_check:
