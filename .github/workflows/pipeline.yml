@@ -62,7 +62,7 @@ jobs:
           title: "Pokedex Deployment Pipeline Success"
           description: "All tests passed. Commit depoyed to Render!"
           color: 0x008000
-          url: "https://github.com/akskettu-hub/full-stack-open-pokedex/${{ github.sha }}"
+          url: "https://github.com/akskettu-hub/full-stack-open-pokedex/commit/${{ github.sha }}"
           username: Pokedex Pipeline Bot
           
           
@@ -76,7 +76,7 @@ jobs:
           title: "Pokedex Deployment Pipeline Failed!"
           description: "Commit `${{ github.sha }}` faild to pass tests or build!"
           color: 0xd42b12
-          url: "https://github.com/akskettu-hub/full-stack-open-pokedex/${{ github.sha }}"
+          url: "https://github.com/akskettu-hub/full-stack-open-pokedex/commit/${{ github.sha }}"
           username: Pokedex Pipeline Bot
 
   
