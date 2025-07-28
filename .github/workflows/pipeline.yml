@@ -52,6 +52,28 @@ jobs:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
           curl "$deploy_url"
+
+      - name: Successful deploy to server Discord notification
+        uses: rjstone/discord-webhook-notify@v2.2.1
+        if: ${{ success() && github.env.SKIP_TAG_AND_DEPLOY == 'false' }}
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }
+          Username: Pokedex Pipeline Bot
+          severity: info
+          color: '#008000'
+          title: Pokedex Deployment Pipeline Success
+          details: All tests passed. Commit depoyed to Render!
+
+      - name: Failed deploy to server Discord notification
+        uses: rjstone/discord-webhook-notify@v2.2.1
+        if: ${{ failure() && github.env.SKIP_TAG_AND_DEPLOY == 'false' }}
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }
+          Username: Pokedex Pipeline Bot
+          severity: error
+          color: '#d42b12'
+          title: Pokedex Deployment Pipeline Failed!
+          details: Commit faild to pass tests or build!
   
   tag_release:
     if: ${{ github.env.SKIP_TAG_AND_DEPLOY == 'false' }}
