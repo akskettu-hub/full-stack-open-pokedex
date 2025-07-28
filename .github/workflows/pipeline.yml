@@ -47,7 +47,7 @@ jobs:
           retention-days: 30
 
       - name: Trigger deployment
-        if: ${{ env.SKIP_TAG_AND_DEPLOY == 'false' }}
+        if: ${{ github.env.SKIP_TAG_AND_DEPLOY == 'false' }}
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
