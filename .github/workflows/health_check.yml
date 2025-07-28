@@ -2,7 +2,7 @@ name: Health Check
 
 on:
   schedule:
-    - cron: "*/6 * * * *"   # <=== Change this value
+    - cron: "0 6 * * *"   # <=== Change this value
 
 
 jobs:
