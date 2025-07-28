@@ -10,7 +10,7 @@ on:
 env:
   COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
   SKIP_CONDITION: ${{ contains(join(github.event.commits.*.message), '#skip') }}
-  SKIP_TAG_AND_DEPLOY: ${{ github.env.SKIP_CONDITION == 'false' &&  github.event_name == 'push'}}
+  EVENT_NAME: ${{ github.event_name }}
 
 jobs:
   simple_deployment_pipeline:
@@ -47,7 +47,7 @@ jobs:
           retention-days: 30
 
       - name: Trigger deployment
-        if: ${{ github.env.SKIP_TAG_AND_DEPLOY == 'false' }}
+        if: ${{ env.SKIP_CONDITION == 'false' && github.event_name == 'push' }}
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
@@ -55,7 +55,7 @@ jobs:
 
       - name: Successful deploy to server Discord notification
         uses: rjstone/discord-webhook-notify@v2.2.1
-        if: ${{ success() && github.env.SKIP_TAG_AND_DEPLOY == 'false' }}
+        if: ${{ success() && env.SKIP_CONDITION == 'false' && github.event_name == 'push' }}
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           Username: Pokedex Pipeline Bot
@@ -66,7 +66,7 @@ jobs:
 
       - name: Failed deploy to server Discord notification
         uses: rjstone/discord-webhook-notify@v2.2.1
-        if: ${{ failure() && github.env.SKIP_TAG_AND_DEPLOY == 'false' }}
+        if: ${{ failure() }}
         with:
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           Username: Pokedex Pipeline Bot
@@ -76,7 +76,7 @@ jobs:
           details: Commit faild to pass tests or build!
   
   tag_release:
-    if: ${{ github.env.SKIP_TAG_AND_DEPLOY == 'false' }}
+    if: ${{ !contains(join(github.event.commits.*.message), '#skip') && github.event_name == 'push' }}
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-latest
     steps:
