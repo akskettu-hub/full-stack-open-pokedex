@@ -57,7 +57,7 @@ jobs:
         uses: rjstone/discord-webhook-notify@v2.2.1
         if: ${{ success() && github.env.SKIP_TAG_AND_DEPLOY == 'false' }}
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           Username: Pokedex Pipeline Bot
           severity: info
           color: '#008000'
@@ -68,7 +68,7 @@ jobs:
         uses: rjstone/discord-webhook-notify@v2.2.1
         if: ${{ failure() && github.env.SKIP_TAG_AND_DEPLOY == 'false' }}
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
           Username: Pokedex Pipeline Bot
           severity: error
           color: '#d42b12'
