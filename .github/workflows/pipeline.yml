@@ -10,6 +10,7 @@ on:
 env:
   COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
   SKIP_CONDITION: ${{ contains(join(github.event.commits.*.message), '#skip') }}
+  SKIP_TAG_AND_DEPLOY: ${{ github.env.SKIP_CONDITION == 'false' &&  github.event_name == 'push'}}
 
 jobs:
   simple_deployment_pipeline:
@@ -46,14 +47,14 @@ jobs:
           retention-days: 30
 
       - name: Trigger deployment
-        if: ${{ github.event_name == 'push' && env.SKIP_CONDITION == 'false' }}
+        if: ${{ env.SKIP_TAG_AND_DEPLOY == 'false' }}
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
         run: |
           curl "$deploy_url"
   
   tag_release:
-    if: ${{ github.event_name == 'push' && github.env.SKIP_CONDITION == 'false' }}
+    if: ${{ github.env.SKIP_TAG_AND_DEPLOY == 'false' }}
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-latest
     steps:
