@@ -1,9 +1,9 @@
 name: Health Check
 
 on:
-  schedule:
-    - cron: "0 6 * * *"   # <=== Change this value
-
+  push:
+    branches:
+      - main
 
 jobs:
   health_check:
